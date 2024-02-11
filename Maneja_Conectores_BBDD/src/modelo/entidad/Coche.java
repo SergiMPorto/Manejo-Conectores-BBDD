@@ -1,26 +1,49 @@
 package modelo.entidad;
 
+import java.util.ArrayList;
+import java.util.List;
+//@Author SergiMP
+
 public class Coche {
 
+
+
+
 	private int id;
+    private String marca;
 	private String modelo;
 	private int yearFabricacion;
 	private int km;
+   
 	
 	
-	
-	public Coche(int id, String modelo, int yearFabricacion, int km) {
+	public Coche(int id, String marca, String modelo, int yearFabricacion, int km) {
 		super();
 		this.id = id;
+		this.marca = marca;
 		this.modelo = modelo;
 		this.yearFabricacion = yearFabricacion;
 		this.km = km;
 	}
-
+	
 	
 	
 	
 	//Getter and Setter
+	
+	
+
+	
+	public String getMarca() {
+		return marca;
+	}
+
+
+
+
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
 	
 
 	public int getId() {
@@ -78,15 +101,14 @@ public class Coche {
 	}
 
 
+	
 
 
 	@Override
 	public String toString() {
-		return "Coche [id=" + id + ", modelo=" + modelo + ", yearFabricacion=" + yearFabricacion + ", km=" + km + "]";
-	}
+		return "Coche [id=" + id + ", marca=" + marca + ", modelo=" + modelo + ", yearFabricacion=" + yearFabricacion
+				+ ", km=" + km + "]";
 	
 	
 
-	
-
-}
+}}
