@@ -12,5 +12,4 @@ public interface DaoPasajero {
 	public Pasajero consultarPasajero (int id);
 	public List<Pasajero> listarPasajeros();
 	
-
 }

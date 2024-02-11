@@ -19,15 +19,8 @@ public class Main {
         boolean continuar = true;
 
         while (continuar) {
-            System.out.println("Menú:");
-            System.out.println("1. Añadir nuevo coche");
-            System.out.println("2. Borrar coche por ID");
-            System.out.println("3. Consultar coche por ID");
-            System.out.println("4. Modificar coche por ID");
-            System.out.println("5. Listado de coches");
-            System.out.println("6. Gestión de pasajeros");
-            System.out.println("7. Terminar el programa");
-            System.out.print("Seleccione una opción: ");
+        	
+           MenuCoche();
 
             int opcion = scanner.nextInt();
 
@@ -122,16 +115,8 @@ public class Main {
         boolean continuar = true;
 
         while (continuar) {
-            System.out.println("Menú Gestión de Pasajeros:");
-            System.out.println("1. Crear nuevo pasajero");
-            System.out.println("2. Borrar pasajero por ID");
-            System.out.println("3. Consultar pasajero por ID");
-            System.out.println("4. Listar todos los pasajeros");
-            System.out.println("5. Añadir pasajero a coche");
-            System.out.println("6. Eliminar pasajero de un coche");
-            System.out.println("7. Listar todos los pasajeros de un coche");
-            System.out.println("0. Volver al menú principal");
-            System.out.print("Seleccione una opción: ");
+        	
+            MenuPasajeros();
 
             int opcion = scanner.nextInt();
 
@@ -154,7 +139,7 @@ public class Main {
                     break;
                 case 5:
                     // Lógica para añadir pasajero a coche
-                    añadirPasajeroACoche(scanner, daoPasajero, daoCoche);
+                    agregarPasajeroACoche(scanner, daoPasajero, daoCoche);
                     break;
                 case 6:
                     // Lógica para eliminar pasajero de un coche
@@ -171,6 +156,34 @@ public class Main {
                     System.out.println("Opción no válida.");
             }
         }
+    }
+    
+    public static void MenuCoche() {
+    	
+    	System.out.println("----MENU COCHE----");
+        System.out.println("1. Añadir nuevo coche");
+        System.out.println("2. Borrar coche por ID");
+        System.out.println("3. Consultar coche por ID");
+        System.out.println("4. Modificar coche por ID");
+        System.out.println("5. Listado de coches");
+        System.out.println("6. Gestión de pasajeros");
+        System.out.println("7. Terminar el programa");
+        System.out.print("Seleccione una opción por favor: ");
+    }
+    
+    public static void MenuPasajeros() {
+    	
+    	
+    	System.out.println("-----MENU PASAJEROS------");
+        System.out.println("1. Crear nuevo pasajero");
+        System.out.println("2. Borrar pasajero por ID");
+        System.out.println("3. Consultar pasajero por ID");
+        System.out.println("4. Listar todos los pasajeros");
+        System.out.println("5. Añadir pasajero a coche");
+        System.out.println("6. Eliminar pasajero de un coche");
+        System.out.println("7. Listar todos los pasajeros de un coche");
+        System.out.println("0. Volver al menú principal");
+        System.out.print("Seleccione una opción por favor: ");
     }
 
     public static void crearNuevoPasajero(Scanner scanner, DaoPasajeroSQL daoPasajero) {
@@ -225,7 +238,7 @@ public class Main {
         }
     }
 
-    public static void añadirPasajeroACoche(Scanner scanner, DaoPasajeroSQL daoPasajero, DaoCocheMySQL daoCoche) {
+    public static void agregarPasajeroACoche(Scanner scanner, DaoPasajeroSQL daoPasajero, DaoCocheMySQL daoCoche) {
         System.out.print("Introduzca el ID del pasajero a añadir: ");
         int idPasajero = scanner.nextInt();
         System.out.print("Introduzca el ID del coche al que desea añadir el pasajero: ");

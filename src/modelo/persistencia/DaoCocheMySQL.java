@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import conexion.ConexionBBDDFichero;
 import modelo.entidad.Coche;
 import modelo.entidad.Pasajero;
 import modelo.persistencia.interfaces.DaoCoche;
@@ -18,6 +19,7 @@ public class DaoCocheMySQL implements DaoCoche{
 	
 private Connection conexion;
 private DaoPasajero daoPasajero;
+private ConexionBBDDFichero cbFichero;
 
 	public DaoCocheMySQL() {
 		
@@ -28,17 +30,16 @@ private DaoPasajero daoPasajero;
 	}
 	
 	public boolean abrirConexion(){
-		String url = "jdbc:mysql://localhost:3306/actividad02";
-		String usuario = "root";
-		String password = "";
-		try {
-			conexion = DriverManager.getConnection(url,usuario,password);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+		 try {
+		        String url = cbFichero.getUrl();
+		        String usuario = cbFichero.getUser();
+		        String password = cbFichero.getPassword();
+		        conexion = DriverManager.getConnection(url, usuario, password);
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		    return true;
 	}
 	
 	public boolean cerrarConexion(){
@@ -58,10 +59,10 @@ private DaoPasajero daoPasajero;
 		}
 		boolean alta = true;
 		
-		String query = "insert into coche (MARCA,MODELO,ANHOFABRICACION,KILOMETRAJE) "
-				+ " values(?,?,?,?)";
+		String query = "INSERT INTO coche (MARCA,MODELO,ANHOFABRICACION,KILOMETRAJE) values(?,?,?,?) ";
+				
 		try {
-			//preparamos la query con valores parametrizables(?)
+			
 			PreparedStatement ps = conexion.prepareStatement(query);
 			ps.setString(1, c.getMarca());
 			ps.setString(2, c.getModelo());
@@ -73,7 +74,7 @@ private DaoPasajero daoPasajero;
 				alta = false;
 			}
 		} catch (SQLException e) {
-			System.out.println("alta -> Error al insertar: " + c);
+			System.out.println("Sistema de alta coche:  Error al insertar  " + c);
 			alta = false;
 			e.printStackTrace();
 		} finally{
@@ -90,10 +91,10 @@ private DaoPasajero daoPasajero;
 		}
 		
 		boolean borrado = true;
-		String query = "delete from coche where id = ?";
+		String query = "DELETE FROM coche WHERE id = ?";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
-			//sustituimos la primera interrgante por la id
+			
 			ps.setInt(1, id);
 			
 			int numeroFilasAfectadas = ps.executeUpdate();
@@ -132,8 +133,8 @@ private DaoPasajero daoPasajero;
 				modificado = true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Sistema de modificación: No hemos podido modificar el  "
-					+ " coche " + c);
+			System.out.println("Sistema de modificación: No hemos podido modificar el coche "+ c);
+			
 			modificado = false;
 			e.printStackTrace();
 		} finally{
@@ -150,8 +151,8 @@ private DaoPasajero daoPasajero;
 		}		
 		Coche coche = null;
 		
-		String query = "select ID,MARCA,MODELO,ANHOFABRICACION,KILOMETRAJE from coche "
-				+ "where id = ?";
+		String query = "SELECT ID,MARCA,MODELO,ANHOFABRICACION,KILOMETRAJE FROM coche WHERE ID = ?";
+				
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			ps.setInt(1, id);
@@ -166,7 +167,7 @@ private DaoPasajero daoPasajero;
 				coche.setKilometraje(rs.getDouble(5));
 			}
 		} catch (SQLException e) {
-			System.out.println("SIstema de obtención de vehículo: error al obtener el"
+			System.out.println("Sistema de obtención de vehículo: error al obtener el"
 					+ "coche con id " + id);
 			e.printStackTrace();
 		} finally {
@@ -184,7 +185,7 @@ private DaoPasajero daoPasajero;
 		}		
 		List<Coche> listaPersonas = new ArrayList<>();
 		
-		String query = "select ID,MARCA, MODELO, ANHOFABRICACION, KILOMETRAJE from coche";
+		String query = "SELECT ID,MARCA, MODELO, ANHOFABRICACION, KILOMETRAJE FROM coche";
 		try {
 			PreparedStatement ps = conexion.prepareStatement(query);
 			
@@ -215,11 +216,10 @@ private DaoPasajero daoPasajero;
 	    public boolean addPasajero(int idPasajero, int idCoche) {
 	        abrirConexion();
 	        try {
-	            
-				
+	        	
 	            Pasajero pasajero = daoPasajero.consultarPasajero(idPasajero);
 	            if (pasajero == null) {
-	                System.out.println("El pasajero no existe.");
+	                System.out.println("El pasajero no existe o no se ha podido encontrar.");
 	                return false;
 	            }
 	            
@@ -228,7 +228,7 @@ private DaoPasajero daoPasajero;
 	            ps.setInt(1, idCoche);
 	            ResultSet rs = ps.executeQuery();
 	            if (!rs.next()) {
-	                System.out.println("El coche no existe.");
+	                System.out.println("El coche no existe o no se ha podido encontrar.");
 	                return false;
 	            }
 	            
@@ -238,11 +238,11 @@ private DaoPasajero daoPasajero;
 	            ps.setInt(2, idCoche);
 	            int filasAfectadas = ps.executeUpdate();
 	            if (filasAfectadas == 0) {
-	                System.out.println("No se pudo asociar el pasajero al coche.");
+	                System.out.println("No se ha podido añadir el pasajero al vehículo");
 	                return false;
 	            }
 	            
-	            System.out.println("Pasajero asociado al coche correctamente.");
+	            System.out.println("Pasajero añadido al coche correctamente.");
 	            return true;
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -261,7 +261,7 @@ private DaoPasajero daoPasajero;
 	            ps.setInt(1, idCoche);
 	            ResultSet rs = ps.executeQuery();
 	            if (!rs.next()) {
-	                System.out.println("El coche no existe.");
+	                System.out.println("El coche no existe o no se ha podido encontrar.");
 	                return false;
 	            }
 	            
@@ -270,11 +270,11 @@ private DaoPasajero daoPasajero;
 	            ps.setInt(1, idCoche);
 	            int filasAfectadas = ps.executeUpdate();
 	            if (filasAfectadas == 0) {
-	                System.out.println("No se pudo desasociar el pasajero del coche.");
+	                System.out.println("No se ha podido quitar el pasajero del coche.");
 	                return false;
 	            }
 	            
-	            System.out.println("Pasajero eliminado del coche correctamente.");
+	            System.out.println("Pasajero quitado del coche correctamente.");
 	            return true;
 	        } catch (SQLException e) {
 	            e.printStackTrace();

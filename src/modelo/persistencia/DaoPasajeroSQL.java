@@ -8,25 +8,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import conexion.ConexionBBDDFichero;
 import modelo.entidad.Pasajero;
 import modelo.persistencia.interfaces.DaoPasajero;
 
 public class DaoPasajeroSQL implements DaoPasajero{
 
 	private Connection conexion;
+	private ConexionBBDDFichero cbFichero;
 
 	public boolean abrirConexion(){
-		String url = "jdbc:mysql://localhost:3306/actividad02";
-		String usuario = "root";
-		String password = "";
 		try {
-			conexion = DriverManager.getConnection(url,usuario,password);
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+	        String url = cbFichero.getUrl();
+	        String usuario = cbFichero.getUser();
+	        String password = cbFichero.getPassword();
+	        conexion = DriverManager.getConnection(url, usuario, password);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	    return true;
 	}
 	
 	public boolean cerrarConexion(){
@@ -62,7 +63,7 @@ public class DaoPasajeroSQL implements DaoPasajero{
 	@Override
 	public boolean borrarPasajero(int id) {
 	    if (!abrirConexion()) {
-	        return false; // Si la conexión no se pudo abrir, devuelve false
+	        return false;
 	    }
 	    String query = "DELETE FROM pasajero WHERE id = ?";
 	    try (PreparedStatement ps = conexion.prepareStatement(query)) {
@@ -73,7 +74,7 @@ public class DaoPasajeroSQL implements DaoPasajero{
 	        e.printStackTrace();
 	        return false;
 	    } finally {
-	        cerrarConexion(); // Asegúrate de cerrar la conexión incluso si ocurre una excepción
+	        cerrarConexion();
 	    }
 	}
 

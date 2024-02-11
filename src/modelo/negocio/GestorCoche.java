@@ -31,17 +31,9 @@ public class GestorCoche {
 			return baja;
 		}
 		
-		/**
-		 * Método que da modifica una persona en base de datos. El nombre de la persona
-		 * debe de tener al menos 3 caracteres. La modificarci�n sera a partir del 
-		 * id de la persona
-		 * @param c la persona a modificar. Dentro tiene que tener el id
-		 * @return 0 en caso de que hayamos modificado la persona, 1 en caso
-		 * de algun error de conexi�n con la bbdd y 2 en caso de que la persona
-		 * tenga menos de 3 caracteres
-		 */
+		
 		public int modificar(Coche c){
-			//aplicamos la regla de negocio
+			
 			if(c.getMarca().length() >= 3) {
 				boolean modificada = daoCoche.modificar(c);
 				if(modificada) {
